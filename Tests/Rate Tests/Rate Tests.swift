@@ -28,8 +28,7 @@ extension `Rate Tests`.`A rate lays ticks end to end from instant zero` {
     func `every tick starts where the one before ends and holds its own centre`() throws {
         for rate in Self.rates {
             #expect(rate.start(of: 0) == .zero)
-            for index in -40...40 {
-                let index = Integer(index)
+            (-40...40).map(Integer.init).forEach { index in
                 let (start, centre, end) = (rate.start(of: index), rate.centre(of: index), rate.start(of: index + 1))
                 #expect(end - start == rate.period)
                 #expect(centre - start == end - centre)
@@ -43,8 +42,7 @@ extension `Rate Tests`.`A rate lays ticks end to end from instant zero` {
     @Test
     func `ticks ended and ticks started differ only inside a tick`() throws {
         for rate in Self.rates {
-            for index in -40...40 {
-                let index = Integer(index)
+            (-40...40).map(Integer.init).forEach { index in
                 #expect(rate.started(before: rate.start(of: index)) == index)
                 #expect(rate.started(before: rate.centre(of: index)) == index + 1)
                 #expect(rate.index(at: rate.centre(of: index)) == index)
@@ -58,8 +56,7 @@ extension `Rate Tests`.`A rate lays ticks end to end from instant zero` {
         let samples = try Rate(48000)
         var total = Integer.zero
         var counts: Set<Integer> = []
-        for frame in 0..<3003 {
-            let frame = Integer(frame)
+        (0..<3003).map(Integer.init).forEach { frame in
             let count = samples.started(before: frames.start(of: frame + 1)) - samples.started(before: frames.start(of: frame))
             counts.insert(count)
             total += count
