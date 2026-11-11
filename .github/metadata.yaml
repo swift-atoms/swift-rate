@@ -1,0 +1,9 @@
+description: "A steady rate for Swift as an exact positive fraction: when each tick starts, which tick holds an instant, and how two rates line up without drift."
+topics:
+  - primitives
+  - rate
+  - time
+  - rational
+homepage: "https://swift-institute.org"
+readme:
+  family: E
