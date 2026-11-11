@@ -5,7 +5,7 @@ Use this package when something happens at a steady rate and you must say exactl
 ## Laws
 
 - A rate is positive. `Rate(_:)` fails with `.nonpositive` for zero or a negative fraction, and `Rate(_:per:)` fails with `.units` when the ticks are counted over no units. Equal fractions are equal rates: 60 per 2 is 30 per 1.
-- `period` is one over the rate, exactly.
+- `frequency` is the rate as a fraction, ticks per unit of time, and `period` is one over it, exactly.
 - Tick zero starts at instant zero. Tick `index` starts at `index` periods and lasts up to, but not at, the start of the next, so every instant belongs to exactly one tick. Indices run below zero for instants before zero.
 - `centre(of:)` is as far from the tick's start as from the next tick's start.
 - `index(at:)` is the tick that holds the instant: `index(at: start(of: i))` is `i`, and so is the index at any instant up to, but not at, `start(of: i + 1)`.

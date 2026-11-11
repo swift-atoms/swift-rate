@@ -6,12 +6,12 @@ public import Rational
 /// Tick zero starts at instant zero, and ticks run both ways from there.
 public struct Rate: Hashable, Sendable {
     /// Ticks in one unit of time: 30000/1001 for the NTSC frame rate in seconds.
-    public let perUnit: Rational
+    public let frequency: Rational
 
     /// Fails with `.nonpositive` for zero or a negative fraction.
-    public init(_ perUnit: Rational) throws(Error) {
-        guard perUnit.polarity == .positive else { throw .nonpositive }
-        self.perUnit = perUnit
+    public init(_ frequency: Rational) throws(Error) {
+        guard frequency.polarity == .positive else { throw .nonpositive }
+        self.frequency = frequency
     }
 
     /// `count` ticks in every `units` units of time. Fails with `.units` for no units and
@@ -31,7 +31,7 @@ extension Rate {
     /// How long one tick lasts: 1001/30000 of a second at 30000/1001 a second.
     public var period: Rational {
         do throws(Rational.Error) {
-            return try perUnit.inverted()
+            return try frequency.inverted()
         } catch {
             preconditionFailure("a rate is positive")
         }
@@ -45,10 +45,10 @@ extension Rate {
 
     /// The tick that is running at `instant`. It is also the number of ticks that ended at or before a
     /// non-negative `instant`.
-    public func index(at instant: Rational) -> Integer { (instant * perUnit).floor }
+    public func index(at instant: Rational) -> Integer { (instant * frequency).floor }
 
     /// The number of ticks that start before `instant`, counted from tick zero; negative before instant zero.
-    public func started(before instant: Rational) -> Integer { (instant * perUnit).ceiling }
+    public func started(before instant: Rational) -> Integer { (instant * frequency).ceiling }
 }
 
 extension Rate {

@@ -9,8 +9,10 @@ extension `Rate Tests` {
 }
 
 extension `Rate Tests`.`A rate lays ticks end to end from instant zero` {
-    static let rates: [Rate] = [(30000, 1001), (24000, 1001), (30, 1), (48000, 1), (1, 3), (7, 5)].map { pair in
-        try! Rate(Integer(pair.0), per: Integer(pair.1))
+    static func rates() throws -> [Rate] {
+        try [(30000, 1001), (24000, 1001), (30, 1), (48000, 1), (1, 3), (7, 5)].map { pair in
+            try Rate(Integer(pair.0), per: Integer(pair.1))
+        }
     }
 
     @Test
@@ -26,7 +28,7 @@ extension `Rate Tests`.`A rate lays ticks end to end from instant zero` {
 
     @Test
     func `every tick starts where the one before ends and holds its own centre`() throws {
-        for rate in Self.rates {
+        for rate in try Self.rates() {
             #expect(rate.start(of: 0) == .zero)
             (-40...40).map(Integer.init).forEach { index in
                 let (start, centre, end) = (rate.start(of: index), rate.centre(of: index), rate.start(of: index + 1))
@@ -41,7 +43,7 @@ extension `Rate Tests`.`A rate lays ticks end to end from instant zero` {
 
     @Test
     func `ticks ended and ticks started differ only inside a tick`() throws {
-        for rate in Self.rates {
+        for rate in try Self.rates() {
             (-40...40).map(Integer.init).forEach { index in
                 #expect(rate.started(before: rate.start(of: index)) == index)
                 #expect(rate.started(before: rate.centre(of: index)) == index + 1)
