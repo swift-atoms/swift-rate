@@ -42,6 +42,22 @@ extension `Rate Tests`.`A rate lays ticks end to end from instant zero` {
     }
 
     @Test
+    func `a position in ticks and its instant are each other's inverse`() throws {
+        for rate in try Self.rates() {
+            try (-40...40).forEach { numerator in
+                let position = try Rational(numerator: Integer(numerator), denominator: 8)
+                let instant = rate.instant(at: position)
+                #expect(rate.position(at: instant) == position)
+                #expect(rate.index(at: instant) == position.floor)
+            }
+            (-10...10).map(Integer.init).forEach { index in
+                #expect(rate.instant(at: Rational(index)) == rate.start(of: index))
+                #expect(rate.position(at: rate.centre(of: index)) * Rational(2) == Rational(2 * index + 1))
+            }
+        }
+    }
+
+    @Test
     func `ticks ended and ticks started differ only inside a tick`() throws {
         for rate in try Self.rates() {
             (-40...40).map(Integer.init).forEach { index in

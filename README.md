@@ -8,6 +8,7 @@ Use this package when something happens at a steady rate and you must say exactl
 - `frequency` is the rate as a fraction, ticks per unit of time, and `period` is one over it, exactly.
 - Tick zero starts at instant zero. Tick `index` starts at `index` periods and lasts up to, but not at, the start of the next, so every instant belongs to exactly one tick. Indices run below zero for instants before zero.
 - `centre(of:)` is as far from the tick's start as from the next tick's start.
+- `instant(at:)` takes a position in ticks, any fraction, to its instant, and `position(at:)` takes it back: `position(at: instant(at: p))` is `p`. At a whole number `instant(at:)` is `start(of:)`, and the floor of `position(at:)` is `index(at:)`.
 - `index(at:)` is the tick that holds the instant: `index(at: start(of: i))` is `i`, and so is the index at any instant up to, but not at, `start(of: i + 1)`.
 - `started(before:)` counts the ticks that start before the instant, from tick zero. At a tick's start it equals `index(at:)`; anywhere inside a tick it is one more.
 - Nothing rounds and nothing overflows: indices are arbitrary-precision `Integer`s and instants are `Rational`s. So differences of `started(before:)` or of `index(at:)` over consecutive stretches add up to the value for the whole stretch. The audio samples that start in each video frame, summed over any run of frames, are exactly the samples that start in the run: at 48000 a second against 30000/1001 a second the counts are 1602 and 1601 and never drift.

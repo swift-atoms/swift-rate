@@ -43,6 +43,13 @@ extension Rate {
     /// The instant halfway through tick `index`.
     public func centre(of index: Integer) -> Rational { Rational(2 * index + 1) * period * Self.half }
 
+    /// The instant `position` ticks after instant zero, for any fraction of a tick: `start(of:)` for a
+    /// whole number, `centre(of:)` for a whole number and a half.
+    public func instant(at position: Rational) -> Rational { position * period }
+
+    /// How many ticks `instant` is after instant zero, as an exact fraction: the inverse of `instant(at:)`.
+    public func position(at instant: Rational) -> Rational { instant * frequency }
+
     /// The tick that is running at `instant`. It is also the number of ticks that ended at or before a
     /// non-negative `instant`.
     public func index(at instant: Rational) -> Integer { (instant * frequency).floor }
